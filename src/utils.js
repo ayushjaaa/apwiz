@@ -3,6 +3,30 @@ import isNumber from "lodash/isNumber";
 import isArray from "lodash/isArray";
 import isObject from "lodash/isObject";
 
+export const TREE_CONFIG = {
+  default: { borderRadius: "10px", padding: "8px" },
+  selected: {
+    backgroundColor: "purple",
+    color: "black",
+  },
+  object: {
+    backgroundColor: "red",
+    color: "black",
+  },
+  string: {
+    backgroundColor: "pink",
+    color: "black",
+  },
+  number: {
+    backgroundColor: "green",
+    color: "black",
+  },
+  array: {
+    backgroundColor: "blue",
+    color: "white",
+  },
+};
+
 export function generateTreeData({ json }) {
   const nodes = [];
   const edges = [];
@@ -19,17 +43,18 @@ export function generateTreeData({ json }) {
     let edge = null;
     const nodeId = customKey || `${parentId}-${key}`;
 
+    const nodeDataType = typeof value;
+    const style = {
+      ...TREE_CONFIG.default,
+      ...(TREE_CONFIG[nodeDataType] || {}),
+    };
+
     if (parentId !== "root") {
       edge = {
         id: `e-${parentId}-${nodeId}`,
         source: parentId,
         target: nodeId,
-        // style: {
-        //   backgroundColor: 'red',
-        //   color: "black",
-        //   borderRadius: "10px",
-        //   padding: "8px",
-        // },
+        style,
       };
       edges.push(edge);
     }
@@ -43,12 +68,7 @@ export function generateTreeData({ json }) {
         path: `${currentPath}${isArrayNode ? "" : "."}${key}`,
       },
       position: { x: depth * 250, y: nodes.length * 75 },
-      // style: {
-      //   backgroundColor: 'black',
-      //   color: "white",
-      //   borderRadius: "10px",
-      //   padding: "8px",
-      // },
+      style,
       meta_data: {
         parentId,
         key,
@@ -57,6 +77,7 @@ export function generateTreeData({ json }) {
         type: typeof value,
         edge,
         depth,
+        nodeDataType,
       },
     };
     nodes.push(node);
