@@ -46,7 +46,8 @@ export default function TreeDiagram({ json }) {
           borderRadius: "0.5rem",
           border: "none",
           color: "#fff",
-          fontSize: "1.5rem",
+          fontSize: "2rem",
+          padding: "0.75rem 1.5rem",
         }}
         value={search}
         onChange={(e) => {
